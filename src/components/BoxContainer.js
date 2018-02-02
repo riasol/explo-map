@@ -1,15 +1,20 @@
-import { Dialog } from 'material-ui'
+import Dialog,{ DialogTitle } from 'material-ui/Dialog'
 import React,{ Component } from 'react'
 import { connect } from 'react-redux'
-class BoxContainer extends Component {
+import PropTypes  from 'prop-types'
+
+export class BoxContainer extends Component {
     render() {
         return (
-            <Dialog >
+            <Dialog open={true}>
+                <DialogTitle>|{this.props.title}</DialogTitle>
             </Dialog>
         )
     }
 }
-BoxContainer.propTypes = {}
+BoxContainer.propTypes = {
+    title:PropTypes.string.isRequired
+}
 const mapStateToProps = (state) => { return {} }
 const mapDispatchToProps = (dispatch) => { return {} }
 export default connect(mapStateToProps, mapDispatchToProps)(BoxContainer);
