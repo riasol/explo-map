@@ -1,15 +1,19 @@
 import React from 'react'
 import { Provider } from 'react-redux'
-import { createStore} from 'redux'
+import {applyMiddleware, createStore} from 'redux'
 import reducer from './reducers/index'
-import './App.css';
-import MapContainer from './components/MapContainer'
+import AppContainer from './components/AppContainer'
+import {createLogger} from 'redux-logger'
 
-const store = createStore(reducer)
+const logger = createLogger({
+    predicate: (getState, action) => action.type !== ''
+});
+const store = createStore(reducer,applyMiddleware(logger))
 
-export const App = (
+const App = (
     <Provider store={store}>
-        <MapContainer />
+        <AppContainer/>
     </Provider>
 )
+export default App
 

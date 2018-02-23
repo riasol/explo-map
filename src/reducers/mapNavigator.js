@@ -1,6 +1,7 @@
 import {MAP_CREATED} from '../actions/mapActions'
 const initialState = {
-    map:null
+    map:null,
+    layers:[]
 }
 export default function changePosition(state = initialState, action) {
     switch (action.type) {

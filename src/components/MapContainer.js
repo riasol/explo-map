@@ -1,42 +1,51 @@
 import React, {Component} from 'react'
-const ol=require('openlayers/dist/ol-debug')
-import {countries} from '../resources/countries.js'
-import {mapCreateAction} from '../actions/mapActions'
 import { connect } from 'react-redux'
-import Dialog,{ DialogTitle } from 'material-ui/Dialog'
+import PropTypes from 'prop-types'
+import Map from 'ol/map'
+import GeoJSONFormat from 'ol/format/geojson'
+import VectorSource from 'ol/source/vector'
+import VectorLayer from 'ol/layer/vector'
+import View from 'ol/view'
+import {mapCreateAction} from '../actions/mapActions'
+import '../Map.css'
+import 'ol/ol.css'
 
 export class MapContainer extends Component {
     componentDidMount() {
-        const format=new ol.format.GeoJSON()
-        const c=countries
-        format.readFeatures(c)
-        const map = new ol.Map({
-            layers: new ol.layer.Vector({
-                source: new ol.source.Vector({
-                    format: format
-                })
-            }),
-            target:'map',
-            view:new ol.View({
+        const format=new GeoJSONFormat()
+        const source=new VectorSource({
+            format: format,
+            url:this.props.defaultMap.url
+        })
+        const vectorLayer=new VectorLayer({
+            source: source
+        })
+        const layers=[vectorLayer]
+        const map = new Map({
+            layers: layers,
+            view:new View({
                 center:[0,0],
                 zoom:2
             })
         })
+        map.setTarget(this.div)
         this.props.mapCreateAction(map)
     }
 
     render() {
         return (
-            <Dialog open={true}>
-                <DialogTitle>|{this.props.title}</DialogTitle>
-            </Dialog>
+            <div id={'map'} ref={e => this.div = e}/>
         )
     }
 }
 
-MapContainer.propTypes = {}
+MapContainer.propTypes = {
+    defaultMap:PropTypes.object
+}
 const mapStateToProps = (state) => {
-    return {}
+    return {
+        defaultMap:state.settings.defaultMap
+    }
 }
 const mapDispatchToProps = (dispatch) => {
     return {
